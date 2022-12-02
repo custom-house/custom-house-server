@@ -18,7 +18,7 @@ public class AuthenticationRequest {
     private String gender;
     private String age;
     private String household;
-    private String id;
+    private String userId;
     private String email;
     private ObjectId _id;
     public AuthenticationRequest() {

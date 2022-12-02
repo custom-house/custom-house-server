@@ -74,18 +74,18 @@ public class MemberController {
     private List<String> authenticateClient(@RequestBody AuthenticationRequest authenticationRequest) {
         List<String> list = new ArrayList<>();
         String password = authenticationRequest.getPassword();
-        String username = authenticationRequest.getUsername();
+        String userId = authenticationRequest.getUserId();
         Logger logger = Logger.getLogger(MemberController.class.getName());
         logger.info("FINDBYUSERNAMEGETID");
-        Object _id = repository.findByUsername(username).get_id();
-        String name = repository.findByUsername(username).getName();
+        Object _id = repository.findByUserId(userId).get_id();
+        String name = repository.findByUserId(userId).getUsername();
         logger.info("NAME");
         logger.info(name);
         logger.info("IDTOSTRING");
         String string_id = _id.toString();
         logger.info(string_id);
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userId, password));
         }
         catch (Exception e) {
             list.add("ID or password is incorrect!");
@@ -102,9 +102,9 @@ public class MemberController {
     }
 
      */
-    @GetMapping("/member-info/{username}")
-    public Member getMember(@PathVariable("username") String username) {
-        return repository.findByUsername(username);
+    @GetMapping("/member-info/{userId}")
+    public Member getMember(@PathVariable("userId") String userId) {
+        return repository.findByUserId(userId);
     }
 
     @GetMapping("/users")

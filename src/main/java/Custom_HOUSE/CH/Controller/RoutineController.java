@@ -1,7 +1,9 @@
 package Custom_HOUSE.CH.Controller;
 
+import Custom_HOUSE.CH.Repository.RoutineRecomRepository;
 import Custom_HOUSE.CH.Repository.RoutineRepository;
 import Custom_HOUSE.CH.Service.RoutineService;
+import Custom_HOUSE.CH.model.RecomRoutine;
 import Custom_HOUSE.CH.model.Routine;
 import com.mongodb.client.result.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +24,9 @@ public class RoutineController {
     RoutineService service;
 
     @Autowired
+    private RoutineRecomRepository recomRepository;
+
+    @Autowired
     private RoutineRepository repository;
 
     @PostMapping("/new-routine")
@@ -29,17 +35,30 @@ public class RoutineController {
         return "Added member with Routine Name: " + routine.getRoutineName();
     }
 
+    @PostMapping("/new-recom-routine")
+    public String saveRecomRoutine(@RequestBody RecomRoutine recomRoutine) {
+        recomRepository.save(recomRoutine);
+        return "Added new reommended routine with Routine Name: " + recomRoutine.getRoutineName();
+
+    }
+
     @GetMapping("/findRoutine")
     public List<Routine> getAllRoutine() {
         return repository.findAll();
     }
 
     @GetMapping("/routine/{userId}")
-    public List<String> getRoutine(@PathVariable("userId") String userId) {
+    public List<Object> getRoutine(@PathVariable("userId") String userId) {
+        List<Object> returnValue = new ArrayList<>();
         List<Routine> routines = repository.findAllByUserId(userId);
-        return routines.stream()
+        returnValue.add(routines.stream()
                 .map(Routine::getRoutineName)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
+        returnValue.add(routines);
+        return returnValue;
+        /*routines.stream()
+                .map(Routine::getRoutineName)
+                .collect(Collectors.toList())*/
     }
 
     @GetMapping("/trending-routines")

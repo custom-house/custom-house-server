@@ -5,8 +5,10 @@ import Custom_HOUSE.CH.AuthenticationResponse;
 //import Custom_HOUSE.CH.Jwt.JwtUtils;
 import Custom_HOUSE.CH.Repository.MemberRepository;
 //import Custom_HOUSE.CH.Service.KakaoService;
+import Custom_HOUSE.CH.Repository.RoutineRepository;
 import Custom_HOUSE.CH.Service.MemberService;
 import Custom_HOUSE.CH.model.Member;
+import Custom_HOUSE.CH.model.Routine;
 import lombok.extern.java.Log;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +77,7 @@ public class MemberController {
         List<String> list = new ArrayList<>();
         String password = authenticationRequest.getPassword();
         String userId = authenticationRequest.getUserId();
+        String userName = authenticationRequest.getUsername();
         Logger logger = Logger.getLogger(MemberController.class.getName());
         logger.info("FINDBYUSERNAMEGETID");
         Object _id = repository.findByUserId(userId).get_id();
@@ -93,6 +96,7 @@ public class MemberController {
         }
         list.add(string_id);
         list.add(name);
+        list.add(userName);
         return list;
     }
 
